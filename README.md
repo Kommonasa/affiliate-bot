@@ -1,0 +1,2 @@
+# affiliate-bot
+affiliate-bot
