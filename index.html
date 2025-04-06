@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading und Finanz Affiliate-Bot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #chatbox {
+            width: 100%;
+            height: 300px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            overflow-y: scroll;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+        }
+        #user-input {
+            width: 80%;
+            padding: 10px;
+        }
+        #send-btn {
+            padding: 10px;
+            cursor: pointer;
+        }
+        .message {
+            padding: 5px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+        .user-message {
+            background-color: #d9f9d9;
+            text-align: left;
+        }
+        .bot-message {
+            background-color: #e1e1f7;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>Willkommen beim Trading Affiliate-Bot!</h1>
+    <div id="chatbox"></div>
+    <input type="text" id="user-input" placeholder="Frag mich nach einem Trading-Produkt..." />
+    <button id="send-btn">Senden</button>
+
+    <script>
+        const chatbox = document.getElementById('chatbox');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+
+        // Deine Affiliate-Links (ersetze diese mit deinen echten IDs)
+        const affiliateLinks = {
+            amazon: "DEIN_AMAZON_AFFILIATE_ID",
+            etoro: "DEIN_ETORO_AFFILIATE_ID",
+            plus500: "DEIN_PLUS500_AFFILIATE_ID",
+            traderepublic: "DEIN_TRADEREPUBLIC_AFFILIATE_ID"
+        };
+
+        // Begrüßungsnachricht
+        function addMessage(message, sender) {
+            const msgDiv = document.createElement('div');
+            msgDiv.classList.add('message');
+            msgDiv.classList.add(sender + '-message');
+            msgDiv.textContent = message;
+            chatbox.appendChild(msgDiv);
+            chatbox.scrollTop = chatbox.scrollHeight;
+        }
+
+        function searchProducts(query) {
+            const products = [
+                { name: "eToro Broker", link: `https://www.etoro.com/partners/?ref=${affiliateLinks.etoro}`, description: "Handel mit Aktien, Krypto, CFDs und mehr." },
+                { name: "Plus500 CFD-Plattform", link: `https://www.plus500.com/?ref=${affiliateLinks.plus500}`, description: "Handel mit CFDs auf verschiedene Märkte." },
+                { name: "TradeRepublic Aktien und ETFs", link: `https://www.traderepublic.com/?ref=${affiliateLinks.traderepublic}`, description: "Handel mit Aktien und ETFs ohne Gebühren." },
+                { name: "Finanzbücher auf Amazon", link: `https://www.amazon.de/s?k=finanzbuch&tag=${affiliateLinks.amazon}`, description: "Die besten Finanzbücher für Investoren." }
+            ];
+
+            return products.filter(product => product.name.toLowerCase().includes(query.toLowerCase()));
+        }
+
+        function handleUserInput() {
+            const query = userInput.value.trim();
+            if (query) {
+                addMessage(query, 'user');
+                const results = searchProducts(query);
+                if (results.length > 0) {
+                    addMessage("Ich habe folgende Produkte und Dienste gefunden:", 'bot');
+                    results.forEach(product => {
+                        addMessage(`${product.name}: ${product.description} - [Hier kaufen](${product.link})`, 'bot');
+                    });
+                } else {
+                    addMessage("Leider konnte ich nichts finden, das deiner Suche entspricht.", 'bot');
+                }
+            }
+            userInput.value = "";
+        }
+
+        sendBtn.addEventListener('click', handleUserInput);
+
+        // Optional: Drücke Enter für die Suche
+        userInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                handleUserInput();
+            }
+        });
+
+        // Begrüßung
+        addMessage("Hallo! Ich kann dir helfen, Trading-Produkte und Finanzprodukte zu finden. Gib einfach den Namen des Produkts ein.", 'bot');
+    </script>
+</body>
+</html>
